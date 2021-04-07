@@ -1,3 +1,5 @@
 import React from "react";
 
-export const Signup = () => {};
+export const Signup = () => {
+  return "Mugheera";
+};

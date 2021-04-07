@@ -8,11 +8,12 @@ const PublicRoute = ({ component: Component, ...rest }) => (
     render={(props) => {
       if (localStorage.getItem("user")) {
         return (
-          // <Redirect
-          //   to={{
-          //     pathname: "/home",
-          //     state: { from: props.location },
-          //   }}
+          //   <Redirect
+          //     to={{
+          //       pathname: "/home",
+          //       state: { from: props.location },
+          //     }}
+          //   />
           <Component {...props} />
         );
       }
