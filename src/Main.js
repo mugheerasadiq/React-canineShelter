@@ -5,10 +5,11 @@ import { SiderComponent } from "./components/sider";
 import { Switch } from "react-router-dom";
 import PublicRoute from "./components/public_route";
 import { Home } from "./views/Home";
-import { Login } from "./views/Login";
-import { Signup } from "./components/Signup";
+import Login from "./views/Login";
+import Signup from "./views/Signup";
 import PrivateRoute from "./components/private_route";
 import { ConnectedRouter } from "connected-react-router";
+import { history } from "../src/store/configureStore";
 
 //Connected Router is used to synchronize redux with router
 

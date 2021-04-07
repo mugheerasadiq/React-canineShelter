@@ -4,7 +4,7 @@ import "./index.css";
 import Main from "./Main";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import configureStore from "./store.js/configureStore";
+import configureStore from "./store/configureStore";
 
 // Subscribing to redux store
 const store = configureStore();
