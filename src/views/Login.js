@@ -4,9 +4,10 @@ import LoginFormSchema from "../validations/Loginform.validations";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Input, Button, Radio } from "antd";
+import FullPageLoader from "../components/loader";
 
 // Services
-// import { userLogin } from "../../services/user.services";
+import { userLogin } from "../services/user.services";
 
 const LoginForm = ({ onSubmit }) => {
   return (
@@ -68,7 +69,8 @@ const LoginForm = ({ onSubmit }) => {
 };
 
 const Login = ({ userLogin, history }) => {
-  const [type, setType] = useState("user");
+  const [role, setRole] = useState("user");
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = (data) =>
     new Promise((resolve, reject) => {
@@ -77,26 +79,30 @@ const Login = ({ userLogin, history }) => {
 
   const onSubmit = async (values) => {
     try {
-      console.log(values);
-      //   await login(values);
-      //   setTimeout(() => {
-      //     history.replace("/");
-      //   }, 300);
+      setIsLoading(true);
+      await login(values);
+      setTimeout(() => {
+        setIsLoading(false);
+        history.replace("/");
+      }, 300);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
 
   const onChangeRadioButton = (e) => {
-    setType(e.target.value);
+    setRole(e.target.value);
   };
+
+  if (isLoading) return <FullPageLoader />;
 
   return (
     <div className="auth_form_container">
       <div className="auth_form_wrapper">
         <Radio.Group
           onChange={onChangeRadioButton}
-          value={type}
+          value={role}
           className="auth_radio_btn"
         >
           <Radio value={"user"}>User</Radio>
@@ -113,7 +119,7 @@ const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      //   userLogin,
+      userLogin,
     },
     dispatch
   );

@@ -6,17 +6,14 @@ const PublicRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      if (localStorage.getItem("user")) {
+      if (
+        (localStorage.getItem("user") && rest.path === "/signup") ||
+        (localStorage.getItem("user") && rest.path === "/login")
+      )
         return (
-          //   <Redirect
-          //     to={{
-          //       pathname: "/home",
-          //       state: { from: props.location },
-          //     }}
-          //   />
-          <Component {...props} />
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
         );
-      }
+
       return <Component {...props} />;
     }}
   />

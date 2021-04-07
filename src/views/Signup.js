@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import SignupFormSchema from "../validations/Signupform.validations";
+import {
+  SingupFormUserSchema,
+  SingupFormEmpSchema,
+} from "../validations/Signupform.validations";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Input, Button, Radio } from "antd";
+import FullPageLoader from "../components/loader";
 
 // Services
-// import { userLogin } from "../../services/user.services";
+import { userSignup } from "../services/user.services";
 
 const EmpSignupForm = ({ onSubmit }) => {
   return (
@@ -17,8 +21,10 @@ const EmpSignupForm = ({ onSubmit }) => {
         password: "",
         code: "",
       }}
-      validationSchema={SignupFormSchema}
+      validationSchema={SingupFormEmpSchema}
       onSubmit={(values) => {
+        //TEMPORARY
+        delete values.code;
         onSubmit(values);
       }}
     >
@@ -102,8 +108,10 @@ const UserSignupForm = ({ onSubmit }) => {
         email: "",
         password: "",
       }}
-      validationSchema={SignupFormSchema}
+      validationSchema={SingupFormUserSchema}
       onSubmit={(values) => {
+        // delete values.role;
+        console.log(values);
         onSubmit(values);
       }}
     >
@@ -166,7 +174,8 @@ const UserSignupForm = ({ onSubmit }) => {
 };
 
 const Signup = ({ userSignup, history }) => {
-  const [type, setType] = useState("user");
+  const [role, setRole] = useState("user");
+  const [isLoading, setIsLoading] = useState(false);
 
   const signup = (data) =>
     new Promise((resolve, reject) => {
@@ -175,27 +184,31 @@ const Signup = ({ userSignup, history }) => {
 
   const onSubmit = async (values) => {
     try {
-      console.log(values);
-      //   await signup(values);
-      //   setTimeout(() => {
-      //     history.replace("/");
-      //   }, 300);
+      setIsLoading(true);
+      await signup(values);
+      setTimeout(() => {
+        setIsLoading(false);
+        history.push("/");
+      }, 300);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
   const onChangeRadioButton = (e) => {
-    setType(e.target.value);
+    setRole(e.target.value);
   };
 
-  if (type === "user")
+  if (isLoading) return <FullPageLoader />;
+
+  if (role === "user")
     return (
       <div className="auth_form_container">
         <div className="auth_form_wrapper">
           <Radio.Group
             onChange={onChangeRadioButton}
-            value={type}
+            value={role}
             className="auth_radio_btn"
           >
             <Radio value={"user"}>User</Radio>
@@ -205,13 +218,13 @@ const Signup = ({ userSignup, history }) => {
         </div>
       </div>
     );
-  else if (type === "employee")
+  else if (role === "employee")
     return (
       <div className="auth_form_container">
         <div className="auth_form_wrapper">
           <Radio.Group
             onChange={onChangeRadioButton}
-            value={type}
+            value={role}
             className="auth_radio_btn"
           >
             <Radio value={"user"}>User</Radio>
@@ -228,7 +241,7 @@ const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      //   userSignup,
+      userSignup,
     },
     dispatch
   );

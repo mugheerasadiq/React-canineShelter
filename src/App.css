@@ -43,3 +43,56 @@
 .text-danger {
   color: red;
 }
+
+/* Loader */
+
+.full-page-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* Ant overriding */
+
+.ant-divider-horizontal {
+  margin: 15px 0px;
+}
+
+/* Card */
+
+.dog_card_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* dashboard */
+
+.dashboard_layout {
+  height: 100%;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard_btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Add a dog - Modal */
+
+.addDog_input {
+  margin: 5px 0px;
+}
