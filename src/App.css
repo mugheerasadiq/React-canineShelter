@@ -93,6 +93,26 @@
 
 /* Add a dog - Modal */
 
+.addDog_modal {
+  display: flex;
+  flex-direction: column;
+}
+
 .addDog_input {
   margin: 5px 0px;
+}
+
+.addDog_select {
+  margin: 5px 0px;
+  width: 100%;
+}
+
+.addDog_footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addDog_btn {
+  margin-top: 10px;
+  width: 150px;
 }
