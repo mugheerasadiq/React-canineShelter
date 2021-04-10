@@ -127,3 +127,11 @@
   margin-top: 10px;
   width: 150px;
 }
+
+/* Home Pagination */
+
+.home_pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0px;
+}

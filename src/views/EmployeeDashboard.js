@@ -130,20 +130,18 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
   const [updatingRecord, setUpdatingRecord] = useState();
   const [modalType, setModalType] = useState("");
   const [dataSource, setDataSource] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [skip, setSkip] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getDogServiceHelper = () => {
+  const getDogServiceHelper = (limit, skip) => {
     return new Promise((resolve, reject) => {
       return getDog(limit, skip, resolve, reject);
     });
   };
 
-  const getDogService = async () => {
+  const getDogService = async (limit = 10, skip = 0) => {
     try {
-      return await getDogServiceHelper();
+      return await getDogServiceHelper(limit, skip);
     } catch (error) {
       console.log(error);
     }
@@ -187,9 +185,9 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
     setIsLoading(true);
 
     try {
-      setSkip((page - 1) * 10);
-      setLimit(page * 10);
-      data = await getDogService();
+      let skip = (page - 1) * 10;
+      let limit = page * 10;
+      data = await getDogService(limit, skip);
       setCurrentPage(page);
       data.forEach((dog, i) => {
         dog.key = i;
