@@ -17,6 +17,11 @@
   background-color: rgb(246, 250, 255);
   padding: 5%;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1), 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .auth_form {
@@ -27,7 +32,7 @@
 }
 
 .auth_input {
-  width: 250px;
+  width: 280px;
   margin: 5px 0px;
 }
 
@@ -42,6 +47,12 @@
 
 .text-danger {
   color: red;
+}
+
+.auth_radio_wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 /* Loader */

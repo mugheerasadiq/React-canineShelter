@@ -11,6 +11,7 @@ import PrivateRoute from "./components/private_route";
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "../src/store/configureStore";
 import EmployeeDashboard from "./views/EmployeeDashboard";
+import AdoptionDashboard from "./views/AdoptionDashboard";
 
 //Connected Router is used to synchronize redux with router
 
@@ -29,6 +30,11 @@ function Main() {
               exact
               path="/dashboard"
               component={EmployeeDashboard}
+            />
+            <PrivateRoute
+              exact
+              path="/dashboard/adoption"
+              component={AdoptionDashboard}
             />
           </Layout>
         </Layout>

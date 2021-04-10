@@ -12,7 +12,9 @@ const { TextArea } = Input;
 // Update a dog record - form
 const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
   // FileStack helper methods
-  const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
+  //const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
+
+  const apiKey = "AyEaBL87SDKWdJFskiF6zz";
 
   const basicOptions = {
     accept: "image/*",
@@ -211,7 +213,7 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
             className="addDog_select"
             touched={touched.location}
           >
-            <Option value="pakistan">Pakistab</Option>
+            <Option value="pakistan">Pakistan</Option>
             <Option value="india">India</Option>
             <Option value="china">China</Option>
             <Option value="afghanistan">Afghanistan</Option>

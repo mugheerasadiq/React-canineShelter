@@ -10,10 +10,11 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 // Add a dog record - form
-const AddDogForm = ({ onSubmit, handleOk }) => {
+const AddDogForm = ({ onSubmit }) => {
   // FileStack helper methods
-  const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
+  //const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
 
+  const apiKey = "AyEaBL87SDKWdJFskiF6zz";
   const basicOptions = {
     accept: "image/*",
     fromSources: ["local_file_system"],
@@ -39,7 +40,7 @@ const AddDogForm = ({ onSubmit, handleOk }) => {
       validationSchema={AddDogFormSchema}
       onSubmit={(values) => {
         console.log(values);
-        // onSubmit(values);
+        onSubmit(values);
       }}
     >
       {({
@@ -199,7 +200,7 @@ const AddDogForm = ({ onSubmit, handleOk }) => {
             className="addDog_select"
             touched={touched.location}
           >
-            <Option value="pakistan">Pakistab</Option>
+            <Option value="pakistan">Pakistan</Option>
             <Option value="india">India</Option>
             <Option value="china">China</Option>
             <Option value="afghanistan">Afghanistan</Option>
@@ -283,17 +284,17 @@ const AddDogForm = ({ onSubmit, handleOk }) => {
   );
 };
 
-export const AddDogModal = ({ addRecordHandler, showModal, setShowModal }) => {
+export const AddDogModal = ({ addDogAPI, showModal, setShowModal }) => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
-  const handleOk = () => {
+  const onSubmit = async (values) => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setShowModal(false);
-      setConfirmLoading(false);
-    }, 2000);
+    await addDogAPI(values);
+    setVisible(false);
+    setShowModal(false);
+
+    setConfirmLoading(false);
   };
 
   useEffect(() => {
@@ -301,7 +302,6 @@ export const AddDogModal = ({ addRecordHandler, showModal, setShowModal }) => {
   }, [showModal]);
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
     setShowModal(false);
   };
@@ -316,7 +316,7 @@ export const AddDogModal = ({ addRecordHandler, showModal, setShowModal }) => {
         footer={false}
         destroyOnClose
       >
-        <AddDogForm handleOk={handleOk} />
+        <AddDogForm onSubmit={onSubmit} />
         {confirmLoading && <FullPageLoader />}
       </Modal>
     </>

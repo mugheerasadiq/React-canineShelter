@@ -6,18 +6,21 @@ import {
 } from "../validations/Signupform.validations";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Input, Button, Radio } from "antd";
+import { Input, Button, Radio, Select } from "antd";
 import FullPageLoader from "../components/loader";
 
 // Services
 import { userSignup } from "../services/user.services";
 
-const EmpSignupForm = ({ onSubmit }) => {
+const { Option } = Select;
+
+const EmpSignupForm = ({ onSubmit, role }) => {
   return (
     <Formik
       initialValues={{
         name: "",
         email: "",
+        location: "Select the Location",
         password: "",
         code: "",
       }}
@@ -25,6 +28,8 @@ const EmpSignupForm = ({ onSubmit }) => {
       onSubmit={(values) => {
         //TEMPORARY
         delete values.code;
+        values.role = role;
+        console.log(values);
         onSubmit(values);
       }}
     >
@@ -35,6 +40,7 @@ const EmpSignupForm = ({ onSubmit }) => {
         handleBlur,
         handleSubmit,
         errors,
+        setFieldValue,
         /* and other goodies */
       }) => (
         <form onSubmit={handleSubmit} className="auth_form">
@@ -61,6 +67,28 @@ const EmpSignupForm = ({ onSubmit }) => {
           />
           {errors.email && touched.email ? (
             <div className="text-danger">{errors.email}</div>
+          ) : null}
+
+          <Select
+            name="location"
+            placeholder="Select the Location"
+            value={values.location}
+            onBlur={handleBlur}
+            onChange={(location) => setFieldValue("location", location)}
+            touched={touched.location}
+            className="addDog_select"
+          >
+            <Option value="pakistan">Pakistan</Option>
+            <Option value="india">India</Option>
+            <Option value="china">China</Option>
+            <Option value="afghanistan">Afghanistan</Option>
+          </Select>
+          {values.email &&
+          values.name &&
+          values.password &&
+          values.code &&
+          values.location === "Select the Location" ? (
+            <div className="text-danger">Location is required</div>
           ) : null}
 
           <Input
@@ -91,7 +119,12 @@ const EmpSignupForm = ({ onSubmit }) => {
             <div className="text-danger">{errors.code}</div>
           ) : null}
 
-          <Button type="primary" className="auth_btn" htmlType="submit">
+          <Button
+            type="primary"
+            className="auth_btn"
+            htmlType="submit"
+            disabled={values.location === "Select the Location"}
+          >
             Signup
           </Button>
         </form>
@@ -206,14 +239,16 @@ const Signup = ({ userSignup, history }) => {
     return (
       <div className="auth_form_container">
         <div className="auth_form_wrapper">
-          <Radio.Group
-            onChange={onChangeRadioButton}
-            value={role}
-            className="auth_radio_btn"
-          >
-            <Radio value={"user"}>User</Radio>
-            <Radio value={"employee"}>Charity worker</Radio>
-          </Radio.Group>
+          <div className="auth_radio_wrapper">
+            <Radio.Group
+              onChange={onChangeRadioButton}
+              value={role}
+              className="auth_radio_btn"
+            >
+              <Radio value={"user"}>User</Radio>
+              <Radio value={"employee"}>Charity worker</Radio>
+            </Radio.Group>
+          </div>
           <UserSignupForm onSubmit={onSubmit} />
         </div>
       </div>
@@ -222,15 +257,17 @@ const Signup = ({ userSignup, history }) => {
     return (
       <div className="auth_form_container">
         <div className="auth_form_wrapper">
-          <Radio.Group
-            onChange={onChangeRadioButton}
-            value={role}
-            className="auth_radio_btn"
-          >
-            <Radio value={"user"}>User</Radio>
-            <Radio value={"employee"}>Charity worker</Radio>
-          </Radio.Group>
-          <EmpSignupForm onSubmit={onSubmit} />
+          <div className="auth_radio_wrapper">
+            <Radio.Group
+              onChange={onChangeRadioButton}
+              value={role}
+              className="auth_radio_btn"
+            >
+              <Radio value={"user"}>User</Radio>
+              <Radio value={"employee"}>Charity worker</Radio>
+            </Radio.Group>
+          </div>
+          <EmpSignupForm onSubmit={onSubmit} role={role} />
         </div>
       </div>
     );

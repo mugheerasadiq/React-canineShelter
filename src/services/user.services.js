@@ -67,6 +67,7 @@ export const userLogin = (data, resolve, reject) => {
               ...userData,
             })
           );
+
           return resolve(userData);
         } else {
           // Notify Error
@@ -100,12 +101,16 @@ export const userSignup = (data, resolve, reject) => {
           const userData = data.user;
           const { access } = data.tokens;
           setUserToLocalStorage(userData, access.token);
-          console.log(data);
           dispatch(
             setUserData({
               ...userData,
             })
           );
+          // Notify Success
+          notification.success({
+            message: "Success",
+            description: "Account has been successfully created.",
+          });
           return resolve(userData);
         } else {
           // Notify Error
@@ -117,7 +122,6 @@ export const userSignup = (data, resolve, reject) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         const err =
           error && error.response && error.response.data
             ? error.response.data.message
