@@ -61,6 +61,7 @@ const DogDetail = ({ dogData, dogCount, match }) => {
               Are you interested to adopt this pet ?
             </h2>
             <Button>Send message to Owner</Button>
+            <Button>Sent an adoption request</Button>
           </Col>
         </Row>
       </Content>

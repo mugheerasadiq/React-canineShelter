@@ -1,5 +1,5 @@
 import { getRequest, postRequest, putRequest } from "./verb.services";
-import { setUserData } from "../actions/user.actions";
+import { setUserData, setUserFavourites } from "../actions/user.actions";
 import { notification } from "antd";
 
 export const setUserToLocalStorage = (user, token) => {
@@ -214,5 +214,70 @@ export const logout = () => {
     setTimeout(() => {
       window.location = "/";
     }, 500);
+  };
+};
+
+export const addToFavourites = (data, resolve, reject) => {
+  return postRequest("/v1/users/favourites", null, true, data)
+    .then(({ data, status }) => {
+      if (status === 204) {
+        notification.success({
+          message: "Success",
+          description: "Successfully added in Favourites.",
+        });
+        return resolve();
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject(error);
+    });
+};
+
+export const getFavourites = (resolve, reject) => {
+  return (dispatch) => {
+    return getRequest("/v1/users/favourites", false, true)
+      .then(({ data, status }) => {
+        if (status === 200) {
+          let favourites = data.favourites;
+          dispatch(setUserFavourites([...favourites]));
+
+          return resolve(favourites);
+        } else {
+          // Notify Error
+          notification.error({
+            message: "Error",
+            description: "Something went wrong.",
+          });
+          return reject();
+        }
+      })
+      .catch((error) => {
+        const err =
+          error && error.response && error.response.data
+            ? error.response.data.message
+            : "Something went wrong";
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: err,
+        });
+        return reject(error);
+      });
   };
 };

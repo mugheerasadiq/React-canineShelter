@@ -37,7 +37,7 @@ export const getRequest = (url, params = null, hasHeaders, passedToken) => {
     hasHeaders
       ? {
           headers: {
-            "x-access-token": token,
+            Authorization: `Bearer ${token}`,
           },
         }
       : null
@@ -52,7 +52,7 @@ export const postRequest = (url, params = null, hasHeaders, data, apiType) => {
     hasHeaders
       ? {
           headers: {
-            "x-access-token": token,
+            Authorization: `Bearer ${token}`,
           },
         }
       : null

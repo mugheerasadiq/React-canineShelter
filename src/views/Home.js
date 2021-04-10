@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 
 //services
 import { getDog } from "../services/dog.services";
+import { addToFavourites } from "../services/user.services";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -75,25 +76,45 @@ const { Option } = Select;
 // ];
 
 const DogCards = ({ Dogs }) => {
+  const addToFavouritesHelper = async (petId) => {
+    return new Promise((resolve, reject) => {
+      return addToFavourites(petId, resolve, reject);
+    });
+  };
+
+  const addToFavouritesService = async (petId) => {
+    try {
+      return await addToFavouritesHelper(petId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return Dogs.map((dog, i) => (
     <Col span={8} key={i}>
-      <Link to={`/pets/${dog._id}`}>
-        <Card
-          hoverable
-          style={{ width: 300 }}
-          cover={<img alt={dog.name} src={dog.image} style={{ height: 250 }} />}
-          style={{ marginTop: 10 }}
-        >
-          <h3>{dog.name.toUpperCase()}</h3>
+      {/* <Link to={`/pets/${dog._id}`}> */}
+      <Card
+        hoverable
+        style={{ width: 300 }}
+        cover={<img alt={dog.name} src={dog.image} style={{ height: 250 }} />}
+        style={{ marginTop: 10 }}
+      >
+        <h3>{dog.name.toUpperCase()}</h3>
 
-          <h3>{dog.breed}</h3>
-          <Divider />
-          <div className="dog_card_footer">
-            <HeartOutlined className="fvt_icon" />
-            {dog.price}
-          </div>
-        </Card>
-      </Link>
+        <h3>{dog.breed}</h3>
+        <Divider />
+        <div className="dog_card_footer">
+          <HeartOutlined
+            onClick={() => {
+              addToFavouritesService({ petId: dog._id });
+            }}
+            className="fvt_icon"
+          />
+
+          {dog.price}
+        </div>
+      </Card>
+      {/* </Link> */}
     </Col>
   ));
 };
