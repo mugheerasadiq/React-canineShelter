@@ -13,6 +13,7 @@ import { history } from "../src/store/configureStore";
 import EmployeeDashboard from "./views/EmployeeDashboard";
 import AdoptionDashboard from "./views/AdoptionDashboard";
 import Favourite from "./views/Favourite";
+import DogDetail from "./views/DogDetails";
 
 //Connected Router is used to synchronize redux with router
 
@@ -25,8 +26,9 @@ function Main() {
         <Layout>
           <HeaderComponent />
           <Layout>
-            <SiderComponent />
+            {/* <SiderComponent /> */}
             <PublicRoute exact path="/" component={Home} />
+            <PublicRoute path="/pets/:id" component={DogDetail} />
             <PrivateRoute
               exact
               path="/dashboard"

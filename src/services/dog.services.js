@@ -1,5 +1,5 @@
 import { getRequest, postRequest, putRequest } from "./verb.services";
-import { setDogData } from "../actions/dog.actions";
+import { setDogData, setDogCount } from "../actions/dog.actions";
 import { notification } from "antd";
 
 export const setUserToLocalStorage = (user, token) => {
@@ -46,17 +46,20 @@ export const addDog = (data, resolve, reject) => {
   };
 };
 
-export const getDog = (limit = null, skip = null, resolve, reject) => {
+export const getDog = (page = 1, breedname = null, resolve, reject) => {
+  let params = { page };
+  if (breedname !== null) params.breed = breedname;
+  console.log(params);
   return (dispatch) => {
-    return getRequest("v1/pets", { limit, skip }, false)
+    return getRequest("v1/pets", params, false)
       .then(({ data, status }) => {
+        let dogData = data.pets;
+        let dogCount = data.petCounts;
         if (status === 200) {
-          dispatch(
-            setDogData({
-              ...data,
-            })
-          );
-          return resolve(data);
+          dispatch(setDogData([...dogData]));
+          dispatch(setDogCount(dogCount));
+
+          return resolve(dogData);
         } else {
           // Notify Error
           notification.error({

@@ -86,6 +86,11 @@
   align-items: center;
 }
 
+.fvt_icon:hover {
+  color: red;
+  cursor: pointer;
+}
+
 /* dashboard */
 
 .dashboard_layout {
@@ -134,4 +139,41 @@
   display: flex;
   justify-content: flex-end;
   margin: 10px 0px;
+}
+
+/* Breed Filter */
+.breadcrumb_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.breed_filter {
+  margin-top: 16px;
+  width: 200px;
+}
+
+/* Dog Details */
+
+.dogDetail_img {
+  width: 500px;
+  height: 300px;
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+.dogDetail_h1 {
+  font-size: 80px;
+  font-weight: 100;
+  margin: 0px;
+  padding: 0px;
+}
+.dogDetail_h3 {
+  text-transform: capitalize;
+  padding-left: 8px;
+}
+
+.dogDetail_about {
+  margin-top: 30px;
 }

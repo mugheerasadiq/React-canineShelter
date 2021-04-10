@@ -125,7 +125,7 @@ const { Content } = Layout;
 //   },
 // ];
 
-export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
+export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
   const [showModal, setShowModal] = useState(false);
   const [updatingRecord, setUpdatingRecord] = useState();
   const [modalType, setModalType] = useState("");
@@ -133,15 +133,15 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getDogServiceHelper = (limit, skip) => {
+  const getDogServiceHelper = (page) => {
     return new Promise((resolve, reject) => {
-      return getDog(limit, skip, resolve, reject);
+      return getDog(page, null, resolve, reject);
     });
   };
 
-  const getDogService = async (limit = 10, skip = 0) => {
+  const getDogService = async (page) => {
     try {
-      return await getDogServiceHelper(limit, skip);
+      return await getDogServiceHelper(page);
     } catch (error) {
       console.log(error);
     }
@@ -183,11 +183,8 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
   const handlePagination = async (page, pageSize) => {
     let data;
     setIsLoading(true);
-
     try {
-      let skip = (page - 1) * 10;
-      let limit = page * 10;
-      data = await getDogService(limit, skip);
+      data = await getDogService(page);
       setCurrentPage(page);
       data.forEach((dog, i) => {
         dog.key = i;
@@ -196,7 +193,6 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
     } catch (error) {
       console.log(error);
     }
-
     setIsLoading(false);
   };
 
@@ -205,62 +201,77 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: "100px",
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      width: "100px",
     },
     {
       title: "Gender",
       dataIndex: "gender",
       key: "gender",
+      width: "100px",
     },
     {
       title: "Breed",
       dataIndex: "breed",
       key: "breed",
+      width: "150px",
     },
 
     {
       title: "Weight",
       dataIndex: "weight",
       key: "weight",
+      width: "100px",
     },
     {
       title: "Age",
       dataIndex: "age",
       key: "age",
+      width: "70px",
     },
     {
       title: "Color",
       dataIndex: "color",
       key: "color",
+      width: "100px",
     },
     {
       title: "Size",
       dataIndex: "size",
       key: "size",
+      width: "100px",
     },
     {
       title: "About",
       dataIndex: "about",
       key: "about",
+      width: "300px",
     },
     {
       title: "Location",
       dataIndex: "location",
       key: "location",
+      width: "150px",
     },
     {
       title: "Image",
       dataIndex: "image",
       key: "image",
+      width: "150px",
+      render: (_, record) => (
+        <img height={100} width={150} src={record.image} alt={record.name} />
+      ),
     },
     {
       title: "Delete",
       key: "delete",
       fixed: "right",
+      width: "100px",
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?">
@@ -272,6 +283,7 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
       title: "Update",
       key: "update",
       fixed: "right",
+      width: "100px",
       render: (_, record) => {
         return (
           <Popconfirm
@@ -316,12 +328,20 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
           columns={columns}
           dataSource={dataSource}
           scroll={{ x: 240 }}
-          pagination={{
-            PageSize: 10,
-            current: currentPage,
-            total: 50,
-            onChange: handlePagination,
-          }}
+          pagination={false}
+          // pagination={{
+          //   PageSize: 2,
+          //   current: currentPage,
+          //   total: 4,
+          //   onChange: handlePagination,
+          // }}
+        />
+        <Pagination
+          current={currentPage}
+          onChange={handlePagination}
+          total={dogCount}
+          className="home_pagination"
+          pageSize={2}
         />
         {modalType === "addRecord" ? (
           <AddDogModal
@@ -344,6 +364,7 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData }) => {
 const mapStateToProps = (state) => {
   return {
     dogData: state.dog.dogData,
+    dogCount: state.dog.dogCount,
   };
 };
 
