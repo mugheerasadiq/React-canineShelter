@@ -92,29 +92,30 @@ const DogCards = ({ Dogs }) => {
 
   return Dogs.map((dog, i) => (
     <Col span={8} key={i}>
-      {/* <Link to={`/pets/${dog._id}`}> */}
-      <Card
-        hoverable
-        style={{ width: 300 }}
-        cover={<img alt={dog.name} src={dog.image} style={{ height: 250 }} />}
-        style={{ marginTop: 10 }}
-      >
-        <h3>{dog.name.toUpperCase()}</h3>
+      <Link to={`/pets/${dog._id}`}>
+        <Card
+          hoverable
+          style={{ width: 300 }}
+          cover={<img alt={dog.name} src={dog.image} style={{ height: 250 }} />}
+          style={{ marginTop: 10 }}
+        >
+          <h3>{dog.name.toUpperCase()}</h3>
 
-        <h3>{dog.breed}</h3>
-        <Divider />
-        <div className="dog_card_footer">
-          <HeartOutlined
-            onClick={() => {
-              addToFavouritesService({ petId: dog._id });
-            }}
-            className="fvt_icon"
-          />
-
-          {dog.price}
-        </div>
-      </Card>
-      {/* </Link> */}
+          <h3>{dog.breed.toUpperCase()}</h3>
+          <Divider />
+          <div className="dog_card_footer">
+            <HeartOutlined
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addToFavouritesService({ petId: dog._id });
+              }}
+              className="fvt_icon"
+            />
+            {dog.price}
+          </div>
+        </Card>
+      </Link>
     </Col>
   ));
 };

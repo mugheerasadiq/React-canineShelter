@@ -2,16 +2,39 @@ import React, { useEffect, useState } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Button, Row, Col, Layout, Breadcrumb, Card } from "antd";
+import FullPageLoader from "../components/loader";
+//services
+import { makeAdoption } from "../services/user.services";
 
 const { Content } = Layout;
 
 const DogDetail = ({ dogData, dogCount, match }) => {
   const [dogDetail, setDogDetail] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const AdoptionRequest = (data) =>
+    new Promise((resolve, reject) => {
+      return makeAdoption(data, resolve, reject);
+    });
+
+  const AdoptionRequestHandler = async () => {
+    try {
+      setIsLoading(true);
+      AdoptionRequest({ petId: dogDetail._id });
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     let dog = dogData.filter((dog) => dog._id === match.params.id);
     setDogDetail(...dog);
   }, []);
+
+  if (isLoading) return <FullPageLoader />;
 
   return (
     <Layout style={{ padding: "0 24px 24px" }}>
@@ -61,7 +84,9 @@ const DogDetail = ({ dogData, dogCount, match }) => {
               Are you interested to adopt this pet ?
             </h2>
             <Button>Send message to Owner</Button>
-            <Button>Sent an adoption request</Button>
+            <Button onClick={AdoptionRequestHandler}>
+              Sent an adoption request
+            </Button>
           </Col>
         </Row>
       </Content>
@@ -76,6 +101,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      makeAdoption,
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(DogDetail);

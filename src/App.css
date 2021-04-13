@@ -177,3 +177,10 @@
 .dogDetail_about {
   margin-top: 30px;
 }
+
+/* Dog Adoption Modals */
+
+.dogAdoption_modal {
+  display: flex;
+  justify-content: space-around;
+}

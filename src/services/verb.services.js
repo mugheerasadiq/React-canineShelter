@@ -74,6 +74,22 @@ export const putRequest = (url, params = null, hasHeaders, data, apiType) => {
   );
 };
 
+export const patchRequest = (url, params = null, hasHeaders, data, apiType) => {
+  const token = fetchToken();
+  console.log({ ...data });
+  return axios.patch(
+    `${api + url}`,
+    { ...data },
+    hasHeaders
+      ? {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      : null
+  );
+};
+
 export const deleteRequest = (url, params = null, hasHeaders, data) => {
   const token = fetchToken();
   return axios.delete(

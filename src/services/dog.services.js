@@ -49,7 +49,7 @@ export const addDog = (data, resolve, reject) => {
 export const getDog = (page = 1, breedname = null, resolve, reject) => {
   let params = { page };
   if (breedname !== null) params.breed = breedname;
-  console.log(params);
+
   return (dispatch) => {
     return getRequest("v1/pets", params, false)
       .then(({ data, status }) => {

@@ -1,5 +1,14 @@
-import { getRequest, postRequest, putRequest } from "./verb.services";
-import { setUserData, setUserFavourites } from "../actions/user.actions";
+import {
+  getRequest,
+  postRequest,
+  putRequest,
+  patchRequest,
+} from "./verb.services";
+import {
+  setUserData,
+  setUserFavourites,
+  setUserAdoptions,
+} from "../actions/user.actions";
 import { notification } from "antd";
 
 export const setUserToLocalStorage = (user, token) => {
@@ -88,7 +97,7 @@ export const userLogin = (data, resolve, reject) => {
           message: "Error",
           description: err,
         });
-        return reject(error);
+        return reject;
       });
   };
 };
@@ -131,7 +140,7 @@ export const userSignup = (data, resolve, reject) => {
           message: "Error",
           description: err,
         });
-        return reject(error);
+        return reject;
       });
   };
 };
@@ -201,7 +210,7 @@ export const resetPassword = (resetPasswordData, resolve, reject) => {
           message: "Error",
           description: err,
         });
-        return reject();
+        return reject;
       });
   };
 };
@@ -245,7 +254,7 @@ export const addToFavourites = (data, resolve, reject) => {
         message: "Error",
         description: err,
       });
-      return reject(error);
+      return reject();
     });
 };
 
@@ -256,7 +265,6 @@ export const getFavourites = (resolve, reject) => {
         if (status === 200) {
           let favourites = data.favourites;
           dispatch(setUserFavourites([...favourites]));
-
           return resolve(favourites);
         } else {
           // Notify Error
@@ -277,7 +285,102 @@ export const getFavourites = (resolve, reject) => {
           message: "Error",
           description: err,
         });
-        return reject(error);
+        return reject();
       });
   };
+};
+
+export const makeAdoption = (data, resolve, reject) => {
+  return postRequest("/v1/adopt/request", null, true, data)
+    .then(({ data, status }) => {
+      if (status === 201) {
+        notification.success({
+          message: "Success",
+          description: "Successfully sent your adoption request.",
+        });
+        return resolve();
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
+};
+
+export const getAdoptionRequests = (resolve, reject) => {
+  return (dispatch) => {
+    return getRequest("/v1/adopt/request", false, true)
+      .then(({ data, status }) => {
+        if (status === 200) {
+          dispatch(setUserAdoptions([...data]));
+          return resolve(data);
+        } else {
+          // Notify Error
+          notification.error({
+            message: "Error",
+            description: "Something went wrong.",
+          });
+          return reject();
+        }
+      })
+      .catch((error) => {
+        const err =
+          error && error.response && error.response.data
+            ? error.response.data.message
+            : "Something went wrong";
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: err,
+        });
+        return reject();
+      });
+  };
+};
+
+export const ChangeRequestStatus = (params, data, resolve, reject) => {
+  return patchRequest(`/v1/adopt/request/status/${params.id}`, true, true, data)
+    .then(({ data, status }) => {
+      if (status === 200) {
+        notification.success({
+          message: "Success",
+          description: "Request Successfull",
+        });
+        return resolve();
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
 };

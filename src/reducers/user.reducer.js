@@ -4,6 +4,7 @@ import { actions } from "../actions/user.actions";
 const INITIAL_STATE = {
   userData: {},
   userFavourites: [],
+  userAdoptions: [],
 };
 
 // User Reducer.
@@ -13,6 +14,8 @@ export default (state = INITIAL_STATE, { type, data }) => {
       return { ...state, userData: data };
     case actions.SET_USER_FAVOURITES:
       return { ...state, userFavourites: data };
+    case actions.SET_USER_ADOPTIONS:
+      return { ...state, userAdoptions: data };
     default:
       return state;
   }
