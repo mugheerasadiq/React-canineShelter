@@ -10,7 +10,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 // Update a dog record - form
-const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
+const UpdateDogForm = ({ onSubmit, record }) => {
   // FileStack helper methods
   //const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
 
@@ -30,7 +30,6 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
         image: record.image,
         breed: record.breed,
         color: record.color,
-        price: record.price,
         age: record.age,
         weight: record.weight,
         size: record.size,
@@ -39,12 +38,8 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
         location: record.location,
       }}
       validationSchema={AddDogFormSchema}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          console.log("asdasd");
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
-        }, 1000);
+      onSubmit={(values) => {
+        onSubmit(values);
       }}
     >
       {({
@@ -116,21 +111,6 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
           />
           {errors.color && touched.color ? (
             <div className="text-danger">{errors.color}</div>
-          ) : null}
-
-          <label>Price</label>
-          <Input
-            type="text"
-            onChange={handleChange}
-            name="price"
-            placeholder="Price"
-            onBlur={handleBlur}
-            touched={touched.price}
-            value={values.price}
-            className="addDog_input"
-          />
-          {errors.price && touched.price ? (
-            <div className="text-danger">{errors.price}</div>
           ) : null}
 
           <label>Breed</label>
@@ -213,10 +193,12 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
             className="addDog_select"
             touched={touched.location}
           >
-            <Option value="pakistan">Pakistan</Option>
-            <Option value="india">India</Option>
-            <Option value="china">China</Option>
-            <Option value="afghanistan">Afghanistan</Option>
+            <Option value="alabama">Alabama</Option>
+            <Option value="alaska">Alaska</Option>
+            <Option value="california">California</Option>
+            <Option value="indiana">Indiana</Option>
+            <Option value="newyork"> New York</Option>
+            <Option value="ohio"> Ohio</Option>
           </Select>
           {errors.location && touched.location ? (
             <div className="text-danger">{errors.location}</div>
@@ -241,7 +223,6 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
           values.weight &&
           values.age &&
           values.color &&
-          values.price &&
           values.about &&
           !(
             values.breed === "Select the Breed" &&
@@ -278,7 +259,6 @@ const UpdateDogForm = ({ onSubmit, handleOk, record }) => {
                 values.weight === record.weight &&
                 values.age === record.age &&
                 values.color === record.color &&
-                values.price === record.price &&
                 values.about === record.about &&
                 values.image === record.image &&
                 values.breed === record.breed &&
@@ -301,9 +281,19 @@ export const UpdateDogModal = ({
   showModal,
   setShowModal,
   record,
+  updateDogAPI,
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
+
+  const onSubmit = async (values) => {
+    values._id = record._id;
+    setConfirmLoading(true);
+    await updateDogAPI(values);
+    setVisible(false);
+    setShowModal(false);
+    setConfirmLoading(false);
+  };
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -334,7 +324,11 @@ export const UpdateDogModal = ({
         footer={false}
         destroyOnClose
       >
-        <UpdateDogForm handleOk={handleOk} record={record} />
+        <UpdateDogForm
+          handleOk={handleOk}
+          record={record}
+          onSubmit={onSubmit}
+        />
         {confirmLoading && <FullPageLoader />}
       </Modal>
     </>

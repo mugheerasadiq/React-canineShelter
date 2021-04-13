@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import LoginFormSchema from "../validations/Loginform.validations";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Input, Button, Radio } from "antd";
+import { Input, Button } from "antd";
 import FullPageLoader from "../components/loader";
 
 // Services
@@ -69,7 +69,6 @@ const LoginForm = ({ onSubmit }) => {
 };
 
 const Login = ({ userLogin, history }) => {
-  const [role, setRole] = useState("user");
   const [isLoading, setIsLoading] = useState(false);
 
   const login = (data) =>
@@ -91,23 +90,11 @@ const Login = ({ userLogin, history }) => {
     }
   };
 
-  const onChangeRadioButton = (e) => {
-    setRole(e.target.value);
-  };
-
   if (isLoading) return <FullPageLoader />;
 
   return (
     <div className="auth_form_container">
       <div className="auth_form_wrapper">
-        <Radio.Group
-          onChange={onChangeRadioButton}
-          value={role}
-          className="auth_radio_btn"
-        >
-          <Radio value={"user"}>User</Radio>
-          <Radio value={"employee"}>Charity worker</Radio>
-        </Radio.Group>
         <LoginForm onSubmit={onSubmit} />
       </div>
     </div>

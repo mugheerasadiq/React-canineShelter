@@ -14,7 +14,8 @@ import EmployeeDashboard from "./views/EmployeeDashboard";
 import AdoptionDashboard from "./views/AdoptionDashboard";
 import Favourite from "./views/Favourite";
 import DogDetail from "./views/DogDetails";
-
+import Message from "./views/Message";
+import Conversations from "./views/Conversations";
 //Connected Router is used to synchronize redux with router
 
 function Main() {
@@ -40,6 +41,12 @@ function Main() {
               component={AdoptionDashboard}
             />
             <PrivateRoute exact path="/user/favourite" component={Favourite} />
+            <PrivateRoute
+              exact
+              path="/user/conversations"
+              component={Conversations}
+            />
+            <PrivateRoute exact path="/user/messages/:id" component={Message} />
           </Layout>
         </Layout>
       </Switch>

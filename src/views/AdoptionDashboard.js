@@ -15,8 +15,10 @@ const AdoptionDashboard = ({ getAdoptionRequests }) => {
   const [adoptionRequest, setAdoptionRequest] = useState([]);
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isDogModalVisible, setIsDogModalVisible] = useState(false);
+  const [selectedData, setSelectedData] = useState([]);
 
-  const showUserModal = () => {
+  const showUserModal = (record = []) => {
+    setSelectedData(record);
     setIsUserModalVisible(true);
   };
 
@@ -28,7 +30,8 @@ const AdoptionDashboard = ({ getAdoptionRequests }) => {
     setIsUserModalVisible(false);
   };
 
-  const showDogModal = () => {
+  const showDogModal = (record = []) => {
+    setSelectedData(record);
     setIsDogModalVisible(true);
   };
 
@@ -105,38 +108,11 @@ const AdoptionDashboard = ({ getAdoptionRequests }) => {
       title: "Dog Information",
       key: "showDog",
       width: "100px",
-      render: (_, record) => {
+      render: (_, rec, index) => {
         return (
-          <React.Fragment>
-            <Button onClick={showDogModal}>Show Dog Information</Button>
-            <Modal
-              title="Dog Information"
-              visible={isDogModalVisible}
-              onOk={handleDogOk}
-              onCancel={handleDogCancel}
-            >
-              <div className="dogAdoption_modal">
-                <div className="dogAdoption_modal_left">
-                  <img
-                    src={record.pet.img}
-                    alt={record.pet.name}
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <div className="dogAdoption_modal_right">
-                  <h3>Name: {record.pet.name}</h3>
-                  <h3>Age: {record.pet.age}</h3>
-                  <h3>Breed: {record.pet.breed}</h3>
-                  <h3>Color: {record.pet.color}</h3>
-                  <h3>Weight: {record.pet.weight}</h3>
-                  <h3>Location: {record.pet.location}</h3>
-                  <h3>Gender: {record.pet.gender}</h3>
-                  <h3>Size: {record.pet.size}</h3>
-                </div>
-              </div>
-            </Modal>
-          </React.Fragment>
+          <Button onClick={() => showDogModal(rec)}>
+            Show Dog Information
+          </Button>
         );
       },
     },
@@ -145,19 +121,9 @@ const AdoptionDashboard = ({ getAdoptionRequests }) => {
       key: "showUser",
       width: "100px",
       render: (_, record) => (
-        <React.Fragment>
-          <Button onClick={showUserModal}>Show User Information</Button>
-          <Modal
-            title="Dog Information"
-            visible={isUserModalVisible}
-            onOk={handleUserOk}
-            onCancel={handleUserCancel}
-          >
-            <h3>Name: {record.user.name}</h3>
-            <h3>Email: {record.user.email}</h3>
-            <h3>Location: {record.user.location}</h3>
-          </Modal>
-        </React.Fragment>
+        <Button onClick={() => showUserModal(record)}>
+          Show User Information
+        </Button>
       ),
     },
     {
@@ -213,6 +179,48 @@ const AdoptionDashboard = ({ getAdoptionRequests }) => {
           dataSource={adoptionRequest}
           scroll={{ x: 240 }}
         />
+        {selectedData.length !== 0 ? (
+          <Modal
+            title="Dog Information"
+            visible={isDogModalVisible}
+            onOk={handleDogOk}
+            onCancel={handleDogCancel}
+            destroyOnClose={true}
+          >
+            <div className="dogAdoption_modal">
+              <div className="dogAdoption_modal_left">
+                <img
+                  src={selectedData.pet.image}
+                  alt={selectedData.pet.name}
+                  width={100}
+                  height={100}
+                />
+              </div>
+              <div className="dogAdoption_modal_right">
+                <h3>Name: {selectedData.pet.name}</h3>
+                <h3>Age: {selectedData.pet.age}</h3>
+                <h3>Breed: {selectedData.pet.breed}</h3>
+                <h3>Color: {selectedData.pet.color}</h3>
+                <h3>Weight: {selectedData.pet.weight}</h3>
+                <h3>Location: {selectedData.pet.location}</h3>
+                <h3>Gender: {selectedData.pet.gender}</h3>
+                <h3>Size: {selectedData.pet.size}</h3>
+              </div>
+            </div>
+          </Modal>
+        ) : null}
+        {selectedData.length !== 0 ? (
+          <Modal
+            title="Dog Information"
+            visible={isUserModalVisible}
+            onOk={handleUserOk}
+            onCancel={handleUserCancel}
+          >
+            <h3>Name: {selectedData.user.name}</h3>
+            <h3>Email: {selectedData.user.email}</h3>
+            <h3>Location: {selectedData.user.location}</h3>
+          </Modal>
+        ) : null}
       </Content>
     </Layout>
   );

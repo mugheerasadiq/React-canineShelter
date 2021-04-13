@@ -9,7 +9,7 @@ import {
   setUserFavourites,
   setUserAdoptions,
 } from "../actions/user.actions";
-import { notification } from "antd";
+import { message, notification } from "antd";
 
 export const setUserToLocalStorage = (user, token) => {
   localStorage.setItem("user", JSON.stringify(user));
@@ -362,6 +362,132 @@ export const ChangeRequestStatus = (params, data, resolve, reject) => {
           description: "Request Successfull",
         });
         return resolve();
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
+};
+
+export const CreateConvSendMsg = (data, resolve, reject) => {
+  return postRequest("/v1/conversations/message", null, true, data)
+    .then(({ data, status }) => {
+      if (status === 200) {
+        // dispatch(setUserAdoptions([...data]));
+        notification.success({
+          message: "Success",
+          description: "Message sent successfully.",
+        });
+        return resolve(data);
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
+};
+
+export const getAllConversations = (resolve, reject) => {
+  return getRequest("/v1/conversations", false, true)
+    .then(({ data, status }) => {
+      if (status === 200) {
+        let { messages } = data;
+        // dispatch(setUserAdoptions([...data]));
+        return resolve(messages);
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
+};
+
+export const getAllMessages = (id, resolve, reject) => {
+  return getRequest(`/v1/conversations/${id}`, false, true)
+    .then(({ data, status }) => {
+      if (status === 200) {
+        let { messages } = data;
+        // dispatch(setUserAdoptions([...data]));
+        return resolve(messages);
+      } else {
+        // Notify Error
+        notification.error({
+          message: "Error",
+          description: "Something went wrong.",
+        });
+        return reject();
+      }
+    })
+    .catch((error) => {
+      const err =
+        error && error.response && error.response.data
+          ? error.response.data.message
+          : "Something went wrong";
+      // Notify Error
+      notification.error({
+        message: "Error",
+        description: err,
+      });
+      return reject();
+    });
+};
+
+export const sendMessageRequest = (id, data, resolve, reject) => {
+  return postRequest(`/v1/conversations/${id}/message`, null, true, data)
+    .then(({ data, status }) => {
+      if (status === 200) {
+        // dispatch(setUserAdoptions([...data]));
+        notification.success({
+          message: "Success",
+          description: "Message sent successfully.",
+        });
+        return resolve(data);
       } else {
         // Notify Error
         notification.error({

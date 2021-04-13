@@ -60,6 +60,21 @@ const Favourite = ({ getFavourites, userFavourites }) => {
 
   if (isLoading) return <FullPageLoader />;
 
+  if (favourites.length === 0)
+    return (
+      <Layout style={{ padding: "0 24px 24px" }}>
+        <Content
+          className="site-layout-background"
+          style={{
+            marginTop: 20,
+            minHeight: 280,
+          }}
+        >
+          <h1>You have no Favourites</h1>
+        </Content>
+      </Layout>
+    );
+
   return (
     <Layout style={{ padding: "0 24px 24px" }}>
       <Content

@@ -29,7 +29,6 @@ const AddDogForm = ({ onSubmit }) => {
         image: "",
         breed: "Select the Breed",
         color: "",
-        price: "",
         age: "",
         weight: "",
         size: "Select the Size",
@@ -39,7 +38,6 @@ const AddDogForm = ({ onSubmit }) => {
       }}
       validationSchema={AddDogFormSchema}
       onSubmit={(values) => {
-        console.log(values);
         onSubmit(values);
       }}
     >
@@ -108,20 +106,6 @@ const AddDogForm = ({ onSubmit }) => {
           />
           {errors.color && touched.color ? (
             <div className="text-danger">{errors.color}</div>
-          ) : null}
-
-          <Input
-            type="text"
-            onChange={handleChange}
-            name="price"
-            placeholder="Price"
-            onBlur={handleBlur}
-            touched={touched.price}
-            value={values.price}
-            className="addDog_input"
-          />
-          {errors.price && touched.price ? (
-            <div className="text-danger">{errors.price}</div>
           ) : null}
 
           <Select
@@ -200,10 +184,12 @@ const AddDogForm = ({ onSubmit }) => {
             className="addDog_select"
             touched={touched.location}
           >
-            <Option value="pakistan">Pakistan</Option>
-            <Option value="india">India</Option>
-            <Option value="china">China</Option>
-            <Option value="afghanistan">Afghanistan</Option>
+            <Option value="alabama">Alabama</Option>
+            <Option value="alaska">Alaska</Option>
+            <Option value="california">California</Option>
+            <Option value="indiana">Indiana</Option>
+            <Option value="newyork"> New York</Option>
+            <Option value="ohio"> Ohio</Option>
           </Select>
           {errors.location && touched.location ? (
             <div className="text-danger">{errors.location}</div>
@@ -227,7 +213,6 @@ const AddDogForm = ({ onSubmit }) => {
           values.weight &&
           values.age &&
           values.color &&
-          values.price &&
           values.about &&
           !(
             values.breed === "Select the Breed" &&
@@ -264,7 +249,6 @@ const AddDogForm = ({ onSubmit }) => {
                 !values.weight ||
                 !values.age ||
                 !values.color ||
-                !values.price ||
                 !values.about ||
                 !values.image ||
                 !(
@@ -293,7 +277,6 @@ export const AddDogModal = ({ addDogAPI, showModal, setShowModal }) => {
     await addDogAPI(values);
     setVisible(false);
     setShowModal(false);
-
     setConfirmLoading(false);
   };
 

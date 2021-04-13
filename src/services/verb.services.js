@@ -97,7 +97,7 @@ export const deleteRequest = (url, params = null, hasHeaders, data) => {
     hasHeaders
       ? {
           headers: {
-            "x-access-token": token,
+            Authorization: `Bearer ${token}`,
           },
           data: { ...data },
         }

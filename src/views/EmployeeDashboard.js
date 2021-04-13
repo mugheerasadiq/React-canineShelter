@@ -7,131 +7,37 @@ import { UpdateDogModal } from "../modals/updateDog";
 import FullPageLoader from "../components/loader";
 
 //services
-import { addDog, getDog } from "../services/dog.services";
+import { addDog, getDog, UpdateDog, deleteDog } from "../services/dog.services";
 
 const { Content } = Layout;
 
-// const dataSource = [
-//   {
-//     key: 0,
-//     name: "Bella",
-//     price: "$15",
-//     breed: "German Shepherd",
-//     owner: "Ahmed",
-//     image: "images/mydog.jpg",
-//     color: "Red",
-//     weight: "15",
-//     gender: "male",
-//     about: "Wild dog",
-//     location: "Pakistan",
-//     age: "25",
-//     size: "Large",
-//   },
-//   {
-//     key: 1,
-//     name: "Luna",
-//     price: "$15",
-//     breed: "Bulldog ",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 2,
-//     name: "Bailey",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 3,
-//     name: "Daisy",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 4,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-//   {
-//     key: 5,
-//     name: "ABC",
-//     price: "$15",
-//     breed: "ABC",
-//     owner: "Ahmed",
-//     img: "images/mydog.jpg",
-//   },
-// ];
-
-export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
+export const EmployeeDashboard = ({
+  addDog,
+  getDog,
+  dogData,
+  dogCount,
+  UpdateDog,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [updatingRecord, setUpdatingRecord] = useState();
   const [modalType, setModalType] = useState("");
   const [dataSource, setDataSource] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const deletetDogServiceHelper = (id) => {
+    return new Promise((resolve, reject) => {
+      deleteDog(id, resolve, reject);
+    });
+  };
+
+  const deleteDogService = async (page) => {
+    try {
+      await deletetDogServiceHelper(page);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getDogServiceHelper = (page) => {
     return new Promise((resolve, reject) => {
@@ -166,10 +72,10 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
       return new Promise((resolve, reject) => {
         return addDog(data, resolve, reject);
       });
-    // else
-    //   return Promise((resolve, reject) => {
-    //     UpdateDogModal()
-    //   })
+    else
+      return new Promise((resolve, reject) => {
+        return UpdateDog(data._id, data, resolve, reject);
+      });
   };
 
   const addDogService = async (values) => {
@@ -201,12 +107,6 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "100px",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
       width: "100px",
     },
     {
@@ -272,12 +172,18 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
       key: "delete",
       fixed: "right",
       width: "100px",
-      render: (_, record) =>
-        dataSource.length >= 1 ? (
-          <Popconfirm title="Sure to delete?">
-            <a>Delete</a>
-          </Popconfirm>
-        ) : null,
+      render: (_, record) => (
+        <Popconfirm
+          title="Sure to delete?"
+          onConfirm={async () => {
+            setIsLoading(true);
+            await deleteDogService(record._id);
+            setIsLoading(false);
+          }}
+        >
+          <a>Delete</a>
+        </Popconfirm>
+      ),
     },
     {
       title: "Update",
@@ -354,6 +260,7 @@ export const EmployeeDashboard = ({ addDog, getDog, dogData, dogCount }) => {
             showModal={showModal}
             setShowModal={setShowModal}
             record={updatingRecord}
+            updateDogAPI={addDogService}
           />
         )}
       </Content>
@@ -369,6 +276,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ addDog, getDog }, dispatch);
+  bindActionCreators({ addDog, getDog, UpdateDog }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDashboard);
