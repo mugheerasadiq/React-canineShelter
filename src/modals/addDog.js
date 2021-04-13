@@ -12,9 +12,8 @@ const { TextArea } = Input;
 // Add a dog record - form
 const AddDogForm = ({ onSubmit }) => {
   // FileStack helper methods
-  //const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
+  const apiKey = "AuzDYQcwSXOtHarY0mlBcz";
 
-  const apiKey = "AyEaBL87SDKWdJFskiF6zz";
   const basicOptions = {
     accept: "image/*",
     fromSources: ["local_file_system"],
